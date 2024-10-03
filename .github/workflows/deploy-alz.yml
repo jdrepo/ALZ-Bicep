@@ -48,7 +48,7 @@ jobs:
         run: |
             az deployment tenant create --template-file infra-as-code/bicep/modules/managementGroups/managementGroups.bicep \
             --parameters parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }} \
-            --parameters parTopLevelManagementGroupPrefix=${{ env.ManagementGroupSuffix }} \
+            --parameters parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }} \
             --parameters parTopLevelManagementGroupDisplayName="${{ env.TopLevelManagementGroupDisplayName }}" \
             --location ${{ env.Location }} --name create_mgs-${{ env.runNumber }}
 
