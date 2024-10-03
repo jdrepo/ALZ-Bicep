@@ -1,0 +1,157 @@
+name: ALZ GitHub Actions deployment pipeline
+
+on: [workflow_dispatch]
+
+env:
+  ManagementGroupPrefix: "alz-bicep"
+  ManagementGroupSuffix: "-canary"
+  TopLevelManagementGroupDisplayName: "ALZ-Bicep - Canary"
+  Location: "westeurope"
+  LoggingSubId: "c81044cb-2d3c-4804-8fad-7be1c3c20996"
+  LoggingResourceGroupName: "rg-alz-bicep-logging-001"
+  HubNetworkSubId: "f8ea3d38-b42b-4f90-8cd5-e80b35a5f738"
+  HubNetworkResourceGroupName: "rg-alz-bicep-hub-networking-001"
+  RoleAssignmentManagementGroupId: "alz-bicep-platform-canary"
+  SpokeNetworkSubId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  SpokeNetworkResourceGroupName: "Spoke_Networking_POC"
+  runNumber: ${{ github.run_number }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  bicep_tenant_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+      # - name: Az CLI Deploy Management Groups
+      #   id: create_mgs
+      #   shell: bash
+      #   run: |
+      #       az deployment tenant create --template-file infra-as-code/bicep/modules/managementGroups/managementGroups.bicep --parameters parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }} parTopLevelManagementGroupDisplayName="${{ env.TopLevelManagementGroupDisplayName }}" --location ${{ env.Location }} --name create_mgs-${{ env.runNumber }}
+
+      # - name: Deploy Custom Policy Definitions
+      #   id: create_policy_defs
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: managementgroup
+      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/policy/definitions/customPolicyDefinitions.bicep
+      #     parameters: infra-as-code/bicep/modules/policy/definitions/parameters/customPolicyDefinitions.parameters.all.json
+      #     deploymentName: create_policy_defs-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Custom Role Definitions
+      #   id: create_rbac_roles
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: managementgroup
+      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/customRoleDefinitions/customRoleDefinitions.bicep
+      #     parameters: infra-as-code/bicep/modules/customRoleDefinitions/parameters/customRoleDefinitions.parameters.all.json
+      #     deploymentName: create_rbac_roles-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Logging Resource Group
+      #   id: create_logging_rg
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: subscription
+      #     subscriptionId: ${{ env.LoggingSubId }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/resourceGroup/resourceGroup.bicep
+      #     parameters: parResourceGroupName=${{ env.LoggingResourceGroupName }} parLocation=${{ env.Location }}
+      #     deploymentName: create_logging_rg-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Logging
+      #   id: create_logging
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     subscriptionId: ${{ env.LoggingSubId }}
+      #     resourceGroupName: ${{ env.LoggingResourceGroupName }}
+      #     template: infra-as-code/bicep/modules/logging/logging.bicep
+      #     parameters: infra-as-code/bicep/modules/logging/parameters/logging.parameters.all.json
+      #     deploymentName: create_logging-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Hub Networking Resource Group
+      #   id: create_hub_network_rg
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: subscription
+      #     subscriptionId: ${{ env.HubNetworkSubId }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/resourceGroup/resourceGroup.bicep
+      #     parameters: parResourceGroupName=${{ env.HubNetworkResourceGroupName }} parLocation=${{ env.Location }}
+      #     deploymentName: create_hub_network_rg-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Hub Network
+      #   id: create_hub_network
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     subscriptionId: ${{ env.HubNetworkSubId }}
+      #     resourceGroupName: ${{ env.HubNetworkResourceGroupName }}
+      #     template: infra-as-code/bicep/modules/hubNetworking/hubNetworking.bicep
+      #     parameters: infra-as-code/bicep/modules/hubNetworking/parameters/hubNetworking.parameters.all.json
+      #     deploymentName: create_hub_network-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Role Assignment
+      #   id: create_role_assignment
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: managementgroup
+      #     managementGroupId: ${{ env.RoleAssignmentManagementGroupId }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/roleAssignments/roleAssignmentManagementGroup.bicep
+      #     parameters: infra-as-code/bicep/modules/roleAssignments/parameters/roleAssignmentManagementGroup.servicePrincipal.parameters.all.json
+      #     deploymentName: create_role_assignment-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Subscription Placement
+      #   id: create_subscription_placement
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: managementgroup
+      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/subscriptionPlacement/subscriptionPlacement.bicep
+      #     parameters: infra-as-code/bicep/modules/subscriptionPlacement/parameters/subscriptionPlacement.parameters.all.json
+      #     deploymentName: create_subscription_placement-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+      # - name: Deploy Default Policy Assignments
+      #   id: create_policy_assignments
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     scope: managementgroup
+      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
+      #     region: ${{ env.Location }}
+      #     template: infra-as-code/bicep/modules/policy/assignments/alzDefaults/alzDefaultPolicyAssignments.bicep
+      #     parameters: infra-as-code/bicep/modules/policy/assignments/alzDefaults/parameters/alzDefaultPolicyAssignments.parameters.all.json
+      #     deploymentName: create_policy_assignments-${{ env.runNumber }}
+      #     failOnStdErr: false
+
+
