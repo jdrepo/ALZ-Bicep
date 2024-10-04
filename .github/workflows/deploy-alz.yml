@@ -51,7 +51,7 @@ jobs:
             --parameters parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }} \
             --parameters parTopLevelManagementGroupDisplayName="${{ env.TopLevelManagementGroupDisplayName }}" \
             --location ${{ env.Location }} --name create_mgs-${{ env.runNumber }}
-      - run: echo outTopLevelManagementGroupName ${{ steps.create_mgs.outputs.outTopLevelManagementGroupName }}
+      - run: echo outTopLevelManagementGroupName ${{ steps.create_mgs.outputs.outTopLevelManagementGroupName.value }}
       - name: Deploy Custom Policy Definitions
         id: create_policy_defs
         uses: azure/arm-deploy@v2
@@ -60,7 +60,7 @@ jobs:
           managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           region: ${{ env.Location }}
           template: infra-as-code/bicep/modules/policy/definitions/customPolicyDefinitions.bicep
-          parameters: infra-as-code/bicep/modules/policy/definitions/parameters/customPolicyDefinitions.parameters.all.json parTargetManagementGroupId ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
+          parameters: infra-as-code/bicep/modules/policy/definitions/parameters/customPolicyDefinitions.parameters.all.json parTargetManagementGroupId=${{ steps.create_mgs.outputs.outTopLevelManagementGroupName.value }}
           deploymentName: create_policy_defs-${{ env.runNumber }}
           failOnStdErr: false
 
