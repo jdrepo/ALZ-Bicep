@@ -71,7 +71,7 @@ jobs:
           managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           region: ${{ env.Location }}
           template: infra-as-code/bicep/modules/customRoleDefinitions/customRoleDefinitions.bicep
-          parameters: infra-as-code/bicep/modules/customRoleDefinitions/parameters/customRoleDefinitions.parameters.all.json parAssignableScopeManagementGroupId==${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
+          parameters: infra-as-code/bicep/modules/customRoleDefinitions/parameters/customRoleDefinitions.parameters.all.json parAssignableScopeManagementGroupId=${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           deploymentName: create_rbac_roles-${{ env.runNumber }}
           failOnStdErr: false
 
