@@ -99,6 +99,21 @@ jobs:
           deploymentName: create_logging-${{ env.runNumber }}
           failOnStdErr: false
 
+      - name: Deploy MG Diag Settings
+        id: mg_diag_settings
+        uses: azure/arm-deploy@v2
+        with:
+          scope: managementgroup
+          managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
+          template: infra-as-code/bicep/orchestration/mgDiagSettingsAll/mgDiagSettingsAll.bicep
+          parameters: |
+            infra-as-code/bicep/orchestration/mgDiagSettingsAll/parameters/mgDiagSettingsAll.parameters.all.json
+                parLogAnalyticsWorkspaceResourceId=$LAWSID
+                parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
+                parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }} \
+          deploymentName: mg_diag_settings-${{ env.runNumber }}
+          failOnStdErr: false
+
       # - name: Deploy Hub Networking Resource Group
       #   id: create_hub_network_rg
       #   uses: azure/arm-deploy@v1
