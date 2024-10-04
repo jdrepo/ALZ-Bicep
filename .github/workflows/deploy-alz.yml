@@ -51,7 +51,7 @@ jobs:
             --parameters parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }} \
             --parameters parTopLevelManagementGroupDisplayName="${{ env.TopLevelManagementGroupDisplayName }}" \
             --location ${{ env.Location }} --name create_mgs-${{ env.runNumber }}
-      - run: echo outTopLevelManagementGroupName ${{ steps.create_mgs.outputs.outTopLevelManagementGroupName.value }}
+      - run: echo outTopLevelManagementGroupName ${steps.create_mgs.outputs.outTopLevelManagementGroupName}
       - name: Deploy Custom Policy Definitions
         id: create_policy_defs
         uses: azure/arm-deploy@v2
