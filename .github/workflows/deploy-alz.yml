@@ -8,7 +8,7 @@ env:
   TopLevelManagementGroupDisplayName: "ALZ-Bicep-Canary"
   Location: "westeurope"
   LoggingSubId: "c81044cb-2d3c-4804-8fad-7be1c3c20996"
-  LoggingResourceGroupName: "rg-alz-bicep-logging-001"
+  LoggingResourceGroupName: "rg-alz-bicep-canary-logging-001"
   HubNetworkSubId: "f8ea3d38-b42b-4f90-8cd5-e80b35a5f738"
   HubNetworkResourceGroupName: "rg-alz-bicep-hub-networking-001"
   RoleAssignmentManagementGroupId: "alz-bicep-platform-canary"
@@ -87,16 +87,17 @@ jobs:
           deploymentName: create_logging_rg-${{ env.runNumber }}
           failOnStdErr: false
 
-      # - name: Deploy Logging
-      #   id: create_logging
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     subscriptionId: ${{ env.LoggingSubId }}
-      #     resourceGroupName: ${{ env.LoggingResourceGroupName }}
-      #     template: infra-as-code/bicep/modules/logging/logging.bicep
-      #     parameters: infra-as-code/bicep/modules/logging/parameters/logging.parameters.all.json
-      #     deploymentName: create_logging-${{ env.runNumber }}
-      #     failOnStdErr: false
+      - name: Deploy Logging
+        id: create_logging
+        uses: azure/arm-deploy@v2
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ env.LoggingSubId }}
+          resourceGroupName: ${{ env.LoggingResourceGroupName }}
+          template: infra-as-code/bicep/modules/logging/logging.bicep
+          parameters: infra-as-code/bicep/modules/logging/parameters/logging.parameters.all.json
+          deploymentName: create_logging-${{ env.runNumber }}
+          failOnStdErr: false
 
       # - name: Deploy Hub Networking Resource Group
       #   id: create_hub_network_rg
