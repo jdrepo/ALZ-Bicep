@@ -136,7 +136,7 @@ jobs:
           subscriptionId: ${{ env.HubNetworkSubId }}
           resourceGroupName: ${{ env.HubNetworkResourceGroupName }}
           template: infra-as-code/bicep/modules/hubNetworking/hubNetworking.bicep
-          parameters: |
+          parameters: >-
             infra-as-code/bicep/modules/hubNetworking/parameters/hubNetworking.parameters.all.json
             parLocation=$LOCATION
             parCompanyPrefix=${{ env.ManagementGroupPrefix }}
