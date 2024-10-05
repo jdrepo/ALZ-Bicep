@@ -8,8 +8,10 @@ env:
   TopLevelManagementGroupDisplayName: "ALZ-Bicep-Canary"
   Location: "westeurope"
   LoggingSubId: "c81044cb-2d3c-4804-8fad-7be1c3c20996"
+  IdentitySubId: "1697bc80-a657-4ce3-a4c2-14546f508127"
   LoggingResourceGroupName: "rg-alz-bicep-canary-logging-001"
-  HubNetworkSubId: "f8ea3d38-b42b-4f90-8cd5-e80b35a5f738"
+  MgmtSubId: "c81044cb-2d3c-4804-8fad-7be1c3c20996"
+  ConnectivitySubId: "f8ea3d38-b42b-4f90-8cd5-e80b35a5f738"
   HubNetworkResourceGroupName: "rg-alz-bicep-canary-hub-networking-001"
   RoleAssignmentManagementGroupId: "alz-bicep-platform-canary"
   SpokeNetworkSubId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -120,7 +122,7 @@ jobs:
         uses: azure/arm-deploy@v2
         with:
           scope: subscription
-          subscriptionId: ${{ env.HubNetworkSubId }}
+          subscriptionId: ${{ env.ConnectivitySubId }}
           region: ${{ env.Location }}
           template: infra-as-code/bicep/modules/resourceGroup/resourceGroup.bicep
           parameters: parResourceGroupName=${{ env.HubNetworkResourceGroupName }} parLocation=${{ env.Location }}
@@ -133,7 +135,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: ${{ env.HubNetworkSubId }}
+          subscriptionId: ${{ env.ConnectivitySubId }}
           resourceGroupName: ${{ env.HubNetworkResourceGroupName }}
           template: infra-as-code/bicep/modules/hubNetworking/hubNetworking.bicep
           parameters: >-
@@ -168,17 +170,24 @@ jobs:
       #     deploymentName: create_role_assignment-${{ env.runNumber }}
       #     failOnStdErr: false
 
-      # - name: Deploy Subscription Placement
-      #   id: create_subscription_placement
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: managementgroup
-      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
-      #     region: ${{ env.Location }}
-      #     template: infra-as-code/bicep/modules/subscriptionPlacement/subscriptionPlacement.bicep
-      #     parameters: infra-as-code/bicep/modules/subscriptionPlacement/parameters/subscriptionPlacement.parameters.all.json
-      #     deploymentName: create_subscription_placement-${{ env.runNumber }}
-      #     failOnStdErr: false
+      - name: Deploy Subscription Placement
+        id: create_subscription_placement
+        uses: azure/arm-deploy@v1
+        with:
+          scope: managementgroup
+          managementGroupId: ${{ env.ManagementGroupPrefix }}
+          region: ${{ env.Location }}
+          template: infra-as-code/bicep/modules/subscriptionPlacement/subscriptionPlacement.bicep
+          parameters: >-
+            infra-as-code/bicep/modules/subscriptionPlacement/parameters/subscriptionPlacement.parameters.all.json
+            parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
+            parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
+            parPlatformManagementMgSubs="['${{ env.MgmtSubId }}']" \
+            parPlatformConnectivityMgSubs="['${{ env.ConnectivitySubId }}']" \
+            parPlatformIdentityMgSubs="['${{ env.IdentitySubId }}']" \
+          deploymentName: create_subscription_placement-${{ env.runNumber }}
+          failOnStdErr: false
+          additionalArguments: "--what-if"
 
       # - name: Deploy Default Policy Assignments
       #   id: create_policy_assignments
