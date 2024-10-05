@@ -117,7 +117,7 @@ jobs:
 
       - name: Deploy Hub Networking Resource Group
         id: create_hub_network_rg
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@v2
         with:
           scope: subscription
           subscriptionId: ${{ env.HubNetworkSubId }}
@@ -128,33 +128,33 @@ jobs:
           failOnStdErr: false
           additionalArguments: "--what-if"
 
-      # - name: Deploy Hub Network
-      #   id: create_hub_network
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: resourcegroup
-      #     subscriptionId: ${{ env.HubNetworkSubId }}
-      #     resourceGroupName: ${{ env.HubNetworkResourceGroupName }}
-      #     template: infra-as-code/bicep/modules/hubNetworking/hubNetworking.bicep
-      #     parameters: |
-      #       infra-as-code/bicep/modules/hubNetworking/parameters/hubNetworking.parameters.all.json
-      #       parLocation=$LOCATION
-      #       parCompanyPrefix=${{ env.ManagementGroupPrefix }}
-      #       parHubNetworkName=${{ env.ManagementGroupPrefix }}-hub-$LOCATION
-      #       parAzBastionEnabled=false
-      #       parDdosEnabled=false
-      #       parAzFirewallEnabled=false
-      #       parAzFirewallName=${{ env.ManagementGroupPrefix }}-azfw-$LOCATION
-      #       parAzFirewallPoliciesName=${{ env.ManagementGroupPrefix }}-azfwpolicy-$LOCATION
-      #       parHubRouteTableName=${{ env.ManagementGroupPrefix }}-hub-routetable-$LOCATION
-      #       parVpnGatewayEnabled=false
-      #       parExpressRouteGatewayEnabled=false
-      #       parPrivateDnsZoneAutoMergeAzureBackupZone=true \
-      #       parPrivateDnsZonesEnabled=true
-      #       parPrivateDnsZones='("privatelink.file.core.windows.net", "privatelink.wvd.microsoft.com")'
-      #     deploymentName: create_hub_network-${{ env.runNumber }}
-      #     failOnStdErr: false
-      #     additionalArguments: "--what-if"
+      - name: Deploy Hub Network
+        id: create_hub_network
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          subscriptionId: ${{ env.HubNetworkSubId }}
+          resourceGroupName: ${{ env.HubNetworkResourceGroupName }}
+          template: infra-as-code/bicep/modules/hubNetworking/hubNetworking.bicep
+          parameters: |
+            infra-as-code/bicep/modules/hubNetworking/parameters/hubNetworking.parameters.all.json
+            parLocation=$LOCATION
+            parCompanyPrefix=${{ env.ManagementGroupPrefix }}
+            parHubNetworkName=${{ env.ManagementGroupPrefix }}-hub-$LOCATION
+            parAzBastionEnabled=false
+            parDdosEnabled=false
+            parAzFirewallEnabled=false
+            parAzFirewallName=${{ env.ManagementGroupPrefix }}-azfw-$LOCATION
+            parAzFirewallPoliciesName=${{ env.ManagementGroupPrefix }}-azfwpolicy-$LOCATION
+            parHubRouteTableName=${{ env.ManagementGroupPrefix }}-hub-routetable-$LOCATION
+            parVpnGatewayEnabled=false
+            parExpressRouteGatewayEnabled=false
+            parPrivateDnsZoneAutoMergeAzureBackupZone=true \
+            parPrivateDnsZonesEnabled=true
+            parPrivateDnsZones='("privatelink.file.core.windows.net", "privatelink.wvd.microsoft.com")'
+          deploymentName: create_hub_network-${{ env.runNumber }}
+          failOnStdErr: false
+          additionalArguments: "--what-if"
 
       # - name: Deploy Role Assignment
       #   id: create_role_assignment
