@@ -151,7 +151,7 @@ jobs:
             parExpressRouteGatewayEnabled=false
             parPrivateDnsZoneAutoMergeAzureBackupZone=true
             parPrivateDnsZonesEnabled=true
-            parPrivateDnsZones={\"privatelink.file.core.windows.net\", \"privatelink.wvd.microsoft.com\"}
+            parPrivateDnsZones=["privatelink.file.core.windows.net", "privatelink.wvd.microsoft.com"]
           deploymentName: create_hub_network-${{ env.runNumber }}
           failOnStdErr: false
           additionalArguments: "--what-if"
