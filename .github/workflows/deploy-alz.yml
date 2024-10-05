@@ -177,9 +177,9 @@ jobs:
           scope: managementgroup
           managementGroupId: ${{ env.ManagementGroupPrefix }}
           region: ${{ env.Location }}
-          template: infra-as-code/bicep/modules/subscriptionPlacement/subscriptionPlacement.bicep
+          template: infra-as-code/bicep/orchestration/subPlacementAll/subPlacementAll.bicep
           parameters: >-
-            infra-as-code/bicep/modules/subscriptionPlacement/parameters/subscriptionPlacement.parameters.all.json
+            infra-as-code/bicep/orchestration/subPlacementAll/parameters/subPlacementAll.parameters.all.json
             parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
             parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
             parPlatformManagementMgSubs="['${{ env.MgmtSubId }}']" \
