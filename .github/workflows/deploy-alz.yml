@@ -108,9 +108,9 @@ jobs:
           managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           template: infra-as-code/bicep/orchestration/mgDiagSettingsAll/mgDiagSettingsAll.bicep
           parameters: |
-            infra-as-code/bicep/orchestration/mgDiagSettingsAll/parameters/mgDiagSettingsAll.parameters.all.json
-            parLogAnalyticsWorkspaceResourceId=$LAWSID
-            parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
+            infra-as-code/bicep/orchestration/mgDiagSettingsAll/parameters/mgDiagSettingsAll.parameters.all.json \
+            parLogAnalyticsWorkspaceResourceId=$LAWSID \
+            parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }} \
             parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
           deploymentName: mg_diag_settings-${{ env.runNumber }}
           failOnStdErr: false
