@@ -154,7 +154,7 @@ jobs:
             parPrivateDnsZones="['privatelink.file.core.windows.net', 'privatelink.wvd.microsoft.com']"
           deploymentName: create_hub_network-${{ env.runNumber }}
           failOnStdErr: false
-          additionalArguments: "--what-if"
+          #additionalArguments: "--what-if"
 
       # - name: Deploy Role Assignment
       #   id: create_role_assignment
