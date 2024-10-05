@@ -149,7 +149,7 @@ jobs:
             parHubRouteTableName=${{ env.ManagementGroupPrefix }}-hub-routetable-$LOCATION
             parVpnGatewayEnabled=false
             parExpressRouteGatewayEnabled=false
-            parPrivateDnsZoneAutoMergeAzureBackupZone=true \
+            parPrivateDnsZoneAutoMergeAzureBackupZone=true
             parPrivateDnsZonesEnabled=true
             parPrivateDnsZones='("privatelink.file.core.windows.net", "privatelink.wvd.microsoft.com")'
           deploymentName: create_hub_network-${{ env.runNumber }}
