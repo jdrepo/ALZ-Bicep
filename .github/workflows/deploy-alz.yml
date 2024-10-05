@@ -126,7 +126,7 @@ jobs:
           parameters: parResourceGroupName=${{ env.HubNetworkResourceGroupName }} parLocation=${{ env.Location }}
           deploymentName: create_hub_network_rg-${{ env.runNumber }}
           failOnStdErr: false
-          additionalArguments: "--what-if"
+          #additionalArguments: "--what-if"
 
       - name: Deploy Hub Network
         id: create_hub_network
