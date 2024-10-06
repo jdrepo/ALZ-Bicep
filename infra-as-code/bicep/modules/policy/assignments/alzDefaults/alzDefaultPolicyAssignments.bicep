@@ -645,9 +645,6 @@ module modPolicyAssignmentIntRootDeployMdfcConfig '../../../policy/assignments/p
       logAnalytics: {
         value: parLogAnalyticsWorkspaceResourceId
       }
-      enableAscForOssDb : {
-        value: 'Disabled'
-      }
     }
     parPolicyAssignmentIdentityType: varPolicyAssignmentDeployMDFCConfig.libDefinition.identity.type
     parPolicyAssignmentIdentityRoleDefinitionIds: [
