@@ -183,7 +183,7 @@ jobs:
             parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
             parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
             parPlatformManagementMgSubs="['${{ env.MgmtSubId }}']" \
-            parPlatformConnectivityMgSubs="['${{ env.ConnectivitySubId }}']" \
+            parPlatformConnectivityMgSubs="['${{ env.ConnectivitySubId }}']"
             parPlatformIdentityMgSubs="['${{ env.IdentitySubId }}']" \
           deploymentName: create_subscription_placement-${{ env.runNumber }}
           failOnStdErr: false
