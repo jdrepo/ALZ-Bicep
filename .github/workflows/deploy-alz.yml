@@ -19,6 +19,7 @@ env:
   ConnectivitySubId: "f8ea3d38-b42b-4f90-8cd5-e80b35a5f738"
   HubNetworkResourceGroupName: "rg-alz-bicep-canary-hub-networking-001"
   RoleAssignmentManagementGroupId: "alz-bicep-platform-canary"
+  DefenderForCloudEmailSecurityContact: "jens.diedrich@googlemail.com"
   SpokeNetworkSubId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
   SpokeNetworkResourceGroupName: "Spoke_Networking_POC"
   runNumber: ${{ github.run_number }}
@@ -194,16 +195,29 @@ jobs:
           failOnStdErr: false
           #additionalArguments: "--what-if"
 
-      # - name: Deploy Default Policy Assignments
-      #   id: create_policy_assignments
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: managementgroup
-      #     managementGroupId: ${{ env.ManagementGroupPrefix }}
-      #     region: ${{ env.Location }}
-      #     template: infra-as-code/bicep/modules/policy/assignments/alzDefaults/alzDefaultPolicyAssignments.bicep
-      #     parameters: infra-as-code/bicep/modules/policy/assignments/alzDefaults/parameters/alzDefaultPolicyAssignments.parameters.all.json
-      #     deploymentName: create_policy_assignments-${{ env.runNumber }}
-      #     failOnStdErr: false
+      - name: Deploy Default Policy Assignments
+        id: create_policy_assignments
+        uses: azure/arm-deploy@v1
+        with:
+          scope: managementgroup
+          managementGroupId: ${{ env.ManagementGroupPrefix }}
+          region: ${{ env.Location }}
+          template: infra-as-code/bicep/modules/policy/assignments/alzDefaults/alzDefaultPolicyAssignments.bicep
+          parameters: >-
+            infra-as-code/bicep/modules/policy/assignments/alzDefaults/parameters/alzDefaultPolicyAssignments.parameters.all.json
+            parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
+            parDdosEnabled=false
+            parLogAnalyticsWorkSpaceAndAutomationAccountLocation=${{env.Location}}
+            parLogAnalyticsWorkspaceResourceId=${{steps.create_logging.outputs.outLogAnalyticsWorkspaceId}}
+            parDataCollectionRuleVMInsightsResourceId=${{steps.create_logging.outputs.outDataCollectionRuleVMInsightsId}}
+            parDataCollectionRuleChangeTrackingResourceId=${{steps.create_logging.outputs.outDataCollectionRuleChangeTrackingId}}
+            parDataCollectionRuleMDFCSQLResourceId=${{steps.create_logging.outputs.outDataCollectionRuleMDFCSQLId}}
+            parUserAssignedManagedIdentityResourceId=${{steps.create_logging.outputs.outUserAssignedManagedIdentityId}}
+            parMsDefenderForCloudEmailSecurityContact=${{env.DefenderForCloudEmailSecurityContact}}
+            parPrivateDnsResourceGroupId=${{steps.create_logging_rg.outputs.outResourceGroupId}}
+            parTopLevelManagementGroupSuffix=$topLevelMGSuffix
+          deploymentName: create_policy_assignments-${{ env.runNumber }}
+          failOnStdErr: false
+          additionalArguments: '--what-if'
 
 
