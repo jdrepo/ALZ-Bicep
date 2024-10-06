@@ -182,9 +182,9 @@ jobs:
             infra-as-code/bicep/orchestration/subPlacementAll/parameters/subPlacementAll.parameters.all.json
             parTopLevelManagementGroupPrefix=${{ env.ManagementGroupPrefix }}
             parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
-            parPlatformManagementMgSubs="['${{ env.MgmtSubId }}']" \
+            parPlatformManagementMgSubs="['${{ env.MgmtSubId }}']"
             parPlatformConnectivityMgSubs="['${{ env.ConnectivitySubId }}']"
-            parPlatformIdentityMgSubs="['${{ env.IdentitySubId }}']" \
+            parPlatformIdentityMgSubs="['${{ env.IdentitySubId }}']"
           deploymentName: create_subscription_placement-${{ env.runNumber }}
           failOnStdErr: false
           additionalArguments: "--what-if"
