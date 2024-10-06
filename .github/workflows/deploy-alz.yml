@@ -187,7 +187,7 @@ jobs:
             parPlatformIdentityMgSubs="['${{ env.IdentitySubId }}']"
           deploymentName: create_subscription_placement-${{ env.runNumber }}
           failOnStdErr: false
-          additionalArguments: "--what-if"
+          #additionalArguments: "--what-if"
 
       # - name: Deploy Default Policy Assignments
       #   id: create_policy_assignments
