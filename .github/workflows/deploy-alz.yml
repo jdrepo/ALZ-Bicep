@@ -175,7 +175,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: managementgroup
-          managementGroupId: ${{ env.ManagementGroupPrefix }}
+          managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           region: ${{ env.Location }}
           template: infra-as-code/bicep/orchestration/subPlacementAll/subPlacementAll.bicep
           parameters: >-
