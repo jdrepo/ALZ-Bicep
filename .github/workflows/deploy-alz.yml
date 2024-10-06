@@ -204,7 +204,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: managementgroup
-          managementGroupId: ${{ env.ManagementGroupPrefix }}
+          managementGroupId: ${{ env.ManagementGroupPrefix }}${{ env.ManagementGroupSuffix }}
           region: ${{ env.Location }}
           template: infra-as-code/bicep/modules/policy/assignments/alzDefaults/alzDefaultPolicyAssignments.bicep
           parameters: >-
