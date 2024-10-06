@@ -219,7 +219,7 @@ jobs:
             parUserAssignedManagedIdentityResourceId=${{steps.create_logging.outputs.outUserAssignedManagedIdentityId}}
             parMsDefenderForCloudEmailSecurityContact=${{env.DefenderForCloudEmailSecurityContact}}
             parPrivateDnsResourceGroupId=${{steps.create_logging_rg.outputs.outResourceGroupId}}
-            parTopLevelManagementGroupSuffix=$topLevelMGSuffix
+            parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
           deploymentName: create_policy_assignments-${{ env.runNumber }}
           failOnStdErr: false
           additionalArguments: '--what-if'
