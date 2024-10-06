@@ -1,7 +1,12 @@
 name: ALZ GitHub Actions deployment pipeline
 
-on: [workflow_dispatch]
-
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-alz.yml"
+  workflow_dispatch: {}
 env:
   ManagementGroupPrefix: "alz-bicep"
   ManagementGroupSuffix: "-canary"
