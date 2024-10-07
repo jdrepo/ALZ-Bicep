@@ -222,6 +222,6 @@ jobs:
             parTopLevelManagementGroupSuffix=${{ env.ManagementGroupSuffix }}
           deploymentName: create_policy_assignments-${{ env.runNumber }}
           failOnStdErr: false
-          additionalArguments: '--what-if'
+          #additionalArguments: '--what-if'
 
 
